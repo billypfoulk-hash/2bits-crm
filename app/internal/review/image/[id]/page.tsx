@@ -276,7 +276,7 @@ export default function ImageReviewPage({ params }: { params: Promise<{ id: stri
                   </span>
                   <span className="text-xs font-medium">{comment.userName}</span>
                   <button
-                    onClick={e => { e.stopPropagation(); resolveComment(id, comment.id); }}
+                    onClick={e => { e.stopPropagation(); resolveCommentById(comment.id); }}
                     className={`ml-auto flex items-center gap-1 text-[10px] ${comment.resolved ? 'text-emerald-400' : 'text-[#6B6B8A] hover:text-emerald-400'} transition-colors`}
                   >
                     <Check size={10} /> {comment.resolved ? 'Resolved' : 'Resolve'}

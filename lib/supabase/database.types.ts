@@ -26,6 +26,7 @@ export type Database = {
           created_at?: string;
         };
         Update: Partial<Database['public']['Tables']['profiles']['Insert']>;
+        Relationships: [];
       };
       contacts: {
         Row: {
@@ -50,6 +51,7 @@ export type Database = {
           updated_at?: string;
         };
         Update: Partial<Database['public']['Tables']['contacts']['Insert']>;
+        Relationships: [];
       };
       deals: {
         Row: {
@@ -65,6 +67,7 @@ export type Database = {
         };
         Insert: Omit<Database['public']['Tables']['deals']['Row'], 'created_at'> & { created_at?: string };
         Update: Partial<Database['public']['Tables']['deals']['Insert']>;
+        Relationships: [];
       };
       activity_logs: {
         Row: {
@@ -78,6 +81,7 @@ export type Database = {
         };
         Insert: Omit<Database['public']['Tables']['activity_logs']['Row'], 'created_at'> & { created_at?: string };
         Update: Partial<Database['public']['Tables']['activity_logs']['Insert']>;
+        Relationships: [];
       };
       campaigns: {
         Row: {
@@ -95,6 +99,7 @@ export type Database = {
         };
         Insert: Omit<Database['public']['Tables']['campaigns']['Row'], 'created_at'> & { created_at?: string };
         Update: Partial<Database['public']['Tables']['campaigns']['Insert']>;
+        Relationships: [];
       };
       campaign_contacts: {
         Row: {
@@ -103,6 +108,7 @@ export type Database = {
         };
         Insert: Database['public']['Tables']['campaign_contacts']['Row'];
         Update: Partial<Database['public']['Tables']['campaign_contacts']['Row']>;
+        Relationships: [];
       };
       deliverables: {
         Row: {
@@ -119,6 +125,7 @@ export type Database = {
         };
         Insert: Omit<Database['public']['Tables']['deliverables']['Row'], 'created_at'> & { created_at?: string };
         Update: Partial<Database['public']['Tables']['deliverables']['Insert']>;
+        Relationships: [];
       };
       comments: {
         Row: {
@@ -137,6 +144,7 @@ export type Database = {
           created_at?: string;
         };
         Update: Partial<Database['public']['Tables']['comments']['Insert']>;
+        Relationships: [];
       };
       comment_replies: {
         Row: {
@@ -151,6 +159,7 @@ export type Database = {
           created_at?: string;
         };
         Update: Partial<Database['public']['Tables']['comment_replies']['Insert']>;
+        Relationships: [];
       };
     };
     Views: Record<string, never>;

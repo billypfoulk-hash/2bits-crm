@@ -45,6 +45,12 @@ type DeliverableRow = Database['public']['Tables']['deliverables']['Row'];
 
 type CommentRow = Database['public']['Tables']['comments']['Row'];
 
+type CampaignContactRow = { contact_id: string; contacts?: { id: string; name: string } };
+type CampaignWithContacts = CampaignRow & {
+  deliverables?: (DeliverableRow & { comments?: CommentRow[] })[];
+  campaign_contacts?: CampaignContactRow[];
+};
+
 function mapDeliverableRow(del: DeliverableRow & { comments?: CommentRow[] }): Deliverable {
   return {
     id: del.id,
@@ -83,7 +89,7 @@ function mapCampaignRow(row: CampaignWithContacts): Campaign {
     description: row.description ?? '',
     tags: row.tags ?? [],
     dealValue: row.deal_value !== null ? Number(row.deal_value) : undefined,
-    kpis: Array.isArray(row.kpis) ? row.kpis : [],
+    kpis: Array.isArray(row.kpis) ? (row.kpis as unknown as KPI[]) : [],
     createdAt: row.created_at,
     clientIds: contacts.map((contact) => contact.contact_id),
     clientNames: contacts.map((contact) => contact.contacts?.name ?? ''),

@@ -54,23 +54,23 @@ export async function POST(request: NextRequest) {
     email_confirm: true,
   });
 
-  if (createError || !userData) {
+  if (createError || !userData.user) {
     return NextResponse.json({ error: createError?.message ?? 'Unable to create auth user.' }, { status: 500 });
   }
 
   const { error: insertError } = await adminClient
     .from('profiles')
     .insert({
-      id: userData.id,
+      id: userData.user.id,
       name,
       email,
       role,
       client_id: contactId,
-    } as Database['public']['Tables']['profiles']['Insert']);
+    });
 
   if (insertError) {
     return NextResponse.json({ error: insertError.message }, { status: 500 });
   }
 
-  return NextResponse.json({ id: userData.id }, { status: 201 });
+  return NextResponse.json({ id: userData.user.id }, { status: 201 });
 }

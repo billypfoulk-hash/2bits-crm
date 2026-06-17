@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAppStore } from '@/lib/store';
 import { createClient } from '@/lib/supabase/client';
 import type { Database } from '@/lib/supabase/database.types';
+import type { Comment } from '@/lib/types';
 import { ArrowLeft, ThumbsUp, Check, Plus } from 'lucide-react';
 
 type CommentRow = Database['public']['Tables']['comments']['Row'];
@@ -53,7 +54,7 @@ export default function ClientImageReviewPage({ params }: { params: Promise<{ id
       setCommentError(error.message);
       setComments([]);
     } else {
-      setComments((data ?? []).map(mapCommentRow).filter(c => c.pinX != null));
+      setComments((data ?? []).map(mapCommentRow).filter((c: Comment) => c.pinX != null));
     }
   }
 

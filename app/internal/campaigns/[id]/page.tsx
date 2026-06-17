@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
@@ -64,7 +64,7 @@ function mapCampaignRow(row: CampaignWithDeliverables): Campaign {
     description: row.description ?? '',
     tags: row.tags ?? [],
     dealValue: row.deal_value !== null ? Number(row.deal_value) : undefined,
-    kpis: Array.isArray(row.kpis) ? row.kpis : [],
+    kpis: Array.isArray(row.kpis) ? (row.kpis as unknown as KPI[]) : [],
     createdAt: row.created_at,
     clientIds: contacts.map((contact) => contact.contact_id),
     clientNames: contacts.map((contact) => contact.contacts?.name ?? ''),
@@ -150,9 +150,9 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
       return;
     }
 
-    const { data: publicUrlData, error: urlError } = storage.getPublicUrl(filePath);
-    if (urlError || !publicUrlData?.publicUrl) {
-      setError(urlError?.message ?? 'Failed to generate public file URL.');
+    const { data: publicUrlData } = storage.getPublicUrl(filePath);
+    if (!publicUrlData?.publicUrl) {
+      setError('Failed to generate public file URL.');
       setSavingStatus(false);
       return;
     }

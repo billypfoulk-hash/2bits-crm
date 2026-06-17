@@ -2,7 +2,8 @@
 import { useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useAppStore } from '@/lib/store';
-import type { Profile, Campaign } from '@/lib/store';
+import type { Profile } from '@/lib/store';
+import type { Campaign } from '@/lib/types';
 
 // Receives the profile fetched server-side and seeds the Zustand store.
 // Wrap each layout's <main> with this so every Client Component can call
