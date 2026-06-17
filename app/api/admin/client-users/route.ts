@@ -1,6 +1,6 @@
 'use server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
-import { createServerClient } from '@supabase/ssr';
+import { createClient } from '@/lib/supabase/server';
 import { NextResponse, type NextRequest } from 'next/server';
 import type { Database } from '@/lib/supabase/database.types';
 
@@ -13,20 +13,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Service role key is missing.' }, { status: 500 });
   }
 
-  const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll() {
-          return [];
-        },
-      },
-    }
-  );
+  const supabase = await createClient();
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
