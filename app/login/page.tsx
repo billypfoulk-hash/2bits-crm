@@ -15,42 +15,55 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleLogin(e: React.FormEvent) {
+ async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
-    const supabase = createClient();
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
+    try {
+      const supabase = createClient();
+      const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (authError) {
-      setError(authError.message);
+      if (authError) {
+        setError(authError.message);
+        return;
+      }
+
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError || !userData.user) {
+        setError(userError?.message ?? 'Unable to resolve authenticated user.');
+        return;
+      }
+
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', userData.user.id)
+        .maybeSingle() as { data: Pick<ProfileRow, 'role'> | null; error: { message: string } | null };
+
+      if (profileError) {
+        setError(`Profile lookup failed: ${profileError.message}`);
+        return;
+      }
+
+      if (!profile) {
+        setError('No profile found for this account. Contact your admin.');
+        return;
+      }
+
+      const dest =
+        profile.role === 'client_athlete' || profile.role === 'client_brand'
+          ? '/client'
+          : '/internal';
+
+      router.push(dest);
+      router.refresh(); // flush server component cache with new session
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong signing in.');
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-    if (userError || !userData.user) {
-      setError(userError?.message ?? 'Unable to resolve authenticated user.');
-      setLoading(false);
-      return;
-    }
-
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', userData.user.id)
-      .single() as { data: Pick<ProfileRow, 'role'> | null; error: unknown };
-
-    const dest =
-      profile?.role === 'client_athlete' || profile?.role === 'client_brand'
-        ? '/client'
-        : '/internal';
-
-    router.push(dest);
-    router.refresh(); // flush server component cache with new session
   }
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4">
       <div className="mb-10 text-center">
