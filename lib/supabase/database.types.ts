@@ -161,6 +161,27 @@ export type Database = {
         Update: Partial<Database['public']['Tables']['comment_replies']['Insert']>;
         Relationships: [];
       };
+      notifications: {
+        Row: {
+          id: string;
+          user_id: string;
+          actor_name: string;
+          type: 'comment' | 'status_change';
+          deliverable_id: string;
+          deliverable_title: string;
+          deliverable_type: 'video' | 'graphic' | 'copy' | 'photo';
+          message: string;
+          read: boolean;
+          created_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['notifications']['Row'], 'id' | 'created_at' | 'read'> & {
+          id?: string;
+          created_at?: string;
+          read?: boolean;
+        };
+        Update: Partial<Database['public']['Tables']['notifications']['Insert']>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

@@ -109,6 +109,19 @@ export interface Campaign {
   createdAt: string;
 }
 
+export interface AppNotification {
+  id: string;
+  userId: string;
+  actorName: string;
+  type: 'comment' | 'status_change';
+  deliverableId: string;
+  deliverableTitle: string;
+  deliverableType: 'video' | 'graphic' | 'copy' | 'photo';
+  message: string;
+  read: boolean;
+  createdAt: string;
+}
+
 export interface KPI {
   label: string;
   value: string | number;

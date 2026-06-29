@@ -323,6 +323,9 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
     if (!dragging || !campaign) return;
     setSavingStatus(true);
     setDragOver(null);
+
+    const droppedDel = campaign.deliverables.find((d) => d.id === dragging);
+
     const deliverablesClient = supabase.from('deliverables' as const) as any;
     const { error: updateError } = await deliverablesClient.update({ status }).eq('id', dragging);
     if (updateError) {
@@ -337,6 +340,22 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
           ),
         };
       });
+
+      // Fire-and-forget notification
+      if (droppedDel && profile) {
+        const statusLabel = STATUS_CONFIG[status]?.label ?? status;
+        void fetch('/api/notifications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'status_change',
+            deliverable_id: dragging,
+            deliverable_title: droppedDel.title,
+            deliverable_type: droppedDel.type,
+            message: `${profile.name} moved "${droppedDel.title}" to ${statusLabel}`,
+          }),
+        });
+      }
     }
     setSavingStatus(false);
     setDragging(null);
