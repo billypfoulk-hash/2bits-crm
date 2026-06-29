@@ -3,13 +3,14 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAppStore } from '@/lib/store';
 import { createClient } from '@/lib/supabase/client';
-import { LayoutDashboard, Users, Megaphone, FileVideo, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, Megaphone, CalendarDays, FileVideo, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const INTERNAL_NAV = [
   { href: '/internal', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { href: '/internal/crm', label: 'CRM', icon: Users },
   { href: '/internal/campaigns', label: 'Campaigns', icon: Megaphone },
+  { href: '/internal/calendar', label: 'Calendar', icon: CalendarDays },
   { href: '/internal/review', label: 'Review Queue', icon: FileVideo },
 ];
 
