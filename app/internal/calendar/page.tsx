@@ -187,6 +187,19 @@ export default function CalendarPage() {
     setDeliverables((prev) => [...prev, newDel]);
     setSaving(false);
     closeModal();
+
+    // Fire-and-forget automations
+    void fetch('/api/automations/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        trigger_type: 'deliverable_created',
+        deliverable_id: data.id,
+        deliverable_title: data.title,
+        deliverable_type: data.type,
+        assignee_id: formAssigneeId || null,
+      }),
+    });
   }
 
   const daysInMonth = getDaysInMonth(year, month);

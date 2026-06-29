@@ -341,7 +341,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
         };
       });
 
-      // Fire-and-forget notification
+      // Fire-and-forget notification + automations
       if (droppedDel && profile) {
         const statusLabel = STATUS_CONFIG[status]?.label ?? status;
         void fetch('/api/notifications', {
@@ -353,6 +353,18 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
             deliverable_title: droppedDel.title,
             deliverable_type: droppedDel.type,
             message: `${profile.name} moved "${droppedDel.title}" to ${statusLabel}`,
+          }),
+        });
+        void fetch('/api/automations/run', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            trigger_type: 'status_changed',
+            deliverable_id: dragging,
+            deliverable_title: droppedDel.title,
+            deliverable_type: droppedDel.type,
+            assignee_id: droppedDel.assigneeId ?? null,
+            to_status: status,
           }),
         });
       }

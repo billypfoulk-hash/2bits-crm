@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useAppStore } from '@/lib/store';
 import { createClient } from '@/lib/supabase/client';
-import { LayoutDashboard, Users, Megaphone, CalendarDays, FileVideo, Bell, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, Megaphone, CalendarDays, FileVideo, Zap, Bell, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { AppNotification } from '@/lib/types';
 
@@ -14,6 +14,7 @@ const INTERNAL_NAV = [
   { href: '/internal/campaigns', label: 'Campaigns', icon: Megaphone },
   { href: '/internal/calendar', label: 'Calendar', icon: CalendarDays },
   { href: '/internal/review', label: 'Review Queue', icon: FileVideo },
+  { href: '/internal/automations', label: 'Automations', icon: Zap },
 ];
 
 const CLIENT_NAV = [

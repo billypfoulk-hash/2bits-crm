@@ -161,6 +161,26 @@ export type Database = {
         Update: Partial<Database['public']['Tables']['comment_replies']['Insert']>;
         Relationships: [];
       };
+      automation_rules: {
+        Row: {
+          id: string;
+          name: string;
+          enabled: boolean;
+          trigger_type: 'status_changed' | 'deliverable_created';
+          trigger_config: Json;
+          action_type: 'notify_assignee' | 'notify_team' | 'auto_assign';
+          action_config: Json;
+          created_by: string | null;
+          created_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['automation_rules']['Row'], 'id' | 'created_at' | 'enabled'> & {
+          id?: string;
+          created_at?: string;
+          enabled?: boolean;
+        };
+        Update: Partial<Database['public']['Tables']['automation_rules']['Insert']>;
+        Relationships: [];
+      };
       notifications: {
         Row: {
           id: string;
